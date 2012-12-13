@@ -1,14 +1,14 @@
 #!/usr/bin/env python
 
 
-import base64;d=lambda s:"\n".join([l[::-1]for l in [base64.b64decode(l)for l in s.split("\n")[::-1]]])
+import base64,sys;d=lambda s:sys.stdout.write("\n".join([l[::-1]for l in [base64.b64decode(l)for l in s.split("\n")[::-1]]]))
 
 
 def deobfuscate(str):
     decoded_lines = []
     for line in reversed(str.splitlines()):
         decoded_lines.append(base64.decodestring(line))
-    return "\n".join([line[::-1] for line in decoded_lines])
+    print "\n".join([line[::-1] for line in decoded_lines])
 
 if __name__ == "__main__":
     encoded_questions = """
@@ -27,5 +27,5 @@ OnN0bmVtZXJpdXFlciBnbml3b2xsb2YgZWh0IHNhaCBoY2lodyB0cGlyY3Mgbm9odHlQIGEgZXRpclcg
 KUxRU3lNKCBlc2FiYXRhZCBsYW5vaXRhbGVyIGEgcm8gLHNpZGVSICxzdGNlamJvIG5vaHR5cCBlZG9jLW5JICxkZWhjYWNtZU0gP3lodyBkbmEgZXN1IHVveSBkbHVvdyBzbm9pdHVsb3MgZ25pd29sbG9mIGVodCBmbyBoY2lodyAsc3Jlc3UgMDAwLDAwMSB5YiB5bHRuZXVxZXJmIGRlc3NlY2NhIGVyYSB0YWh0IHNlcnV0Y3VydHMgeGVscG1vYyAwMDAsMDAxIGVyb3RzIG90IGRlcml1cWVyIGVyYSB1b3kgZkkgLjI=
 """
 
-    print deobfuscate(encoded_questions)
-    print d(encoded_questions)
+    deobfuscate(encoded_questions)
+    d(encoded_questions)
