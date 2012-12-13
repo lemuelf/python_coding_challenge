@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 
-import base64;d=lambda s:"\n".join([l[::-1]for l in [base64.b64decode(l)for l in reversed(s.split("\n"))]])
+import base64;d=lambda s:"\n".join([l[::-1]for l in [base64.b64decode(l)for l in s.split("\n")[::-1]]])
 
 
 def deobfuscate(str):
