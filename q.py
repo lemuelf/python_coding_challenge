@@ -9,6 +9,8 @@ def deobfuscate(str):
         decoded_lines.append(base64.decodestring(line))
     return "\n".join([line[::-1] for line in decoded_lines])
 
+d=lambda s:"\n".join([l[::-1]for l in [base64.b64decode(l)for l in reversed(s.split("\n"))]])
+
 
 if __name__ == "__main__":
     encoded_questions = """
@@ -28,3 +30,4 @@ KUxRU3lNKCBlc2FiYXRhZCBsYW5vaXRhbGVyIGEgcm8gLHNpZGVSICxzdGNlamJvIG5vaHR5cCBlZG9j
 """
 
     print deobfuscate(encoded_questions)
+    print d(encoded_questions)
