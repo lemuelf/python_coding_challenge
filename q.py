@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
-import base64
+
+import base64;d=lambda s:"\n".join([l[::-1]for l in [base64.b64decode(l)for l in reversed(s.split("\n"))]])
 
 
 def deobfuscate(str):
@@ -8,9 +9,6 @@ def deobfuscate(str):
     for line in reversed(str.splitlines()):
         decoded_lines.append(base64.decodestring(line))
     return "\n".join([line[::-1] for line in decoded_lines])
-
-d=lambda s:"\n".join([l[::-1]for l in [base64.b64decode(l)for l in reversed(s.split("\n"))]])
-
 
 if __name__ == "__main__":
     encoded_questions = """
