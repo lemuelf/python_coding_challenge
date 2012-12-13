@@ -1,0 +1,30 @@
+#!/usr/bin/env python
+
+import base64
+
+
+def deobfuscate(str):
+    decoded_lines = []
+    for line in reversed(str.splitlines()):
+        decoded_lines.append(base64.decodestring(line))
+    return "\n".join([line[::-1] for line in decoded_lines])
+
+
+if __name__ == "__main__":
+    encoded_questions = """
+LnNlbHBtYXhlIGVzdSBvdCBlZXJmIGxlZUYgLnNldGlzYmV3IGNpZmZhcnQgaGdpaCBubyBub2l0YXNpbGFtcm9uZWQgZm8gdHBlY25vYyBlaHQgZWJpcmNzZUQgLjQ=
+ZWxpZiBlbm8gbmkgZWIgdHN1TSApaXYgICAg
+c25vaXRhY2lmaWNlcHMgOC1QRVAgdGVlbSB0c3VNICl2ICAgIA==
+Ni4yIG5vaHR5UCBodGl3IGtyb3cgdHN1TSApdmkgICAg
+c2VsdWRvbSByZWh0byB5YiBlbGJhdHJvcG1pIGViIGRsdW9ocyBzc2FsQyApaWlpICAgIA==
+dHVwdHVvIGV0YWlycGFvcnBwYSBodGl3IGRleWFscHNpZCBlYiBkbHVvaHMgc2RvaHRlbSBldm9iYSBlaHQgZm8gdHNldCBhICxlbmlsIGRuYW1tb2MgZWh0IG5vIG51ciBmSSApaWkgICAg
+LnJvcnJlIG5vIG5vaXRwZWN4ZSBsYXJlbmVnIGEgc2VzaWFSIC5zc2VjY3VzIG5vIHRjaWQgYSBzbnJ1dGVSIC5lbGlmIGEgbW9yZiB0Y2VqYm8gTk9TSiBhIHNkYWVyIDogImV2aWVjZXIiIC0gICAgICAgIA==
+LnJvcnJlIG5vIG5vaXRwZWN4ZSBsYXJlbmVnIGEgc2VzaWFSIC5zc2VjY3VzIG5vIDEgc25ydXRlUiAudGNpZCBlcHl0IGZvIHRuZW11Z3JhIGVubyBuaSBzZWthVCAuZWxpZiBhIG90IHRjZWpibyBOT1NKIGEgc2V0aXJ3KXJldm8oIDogImRuZXMiIC0gICAgICAgIA==
+eXJhc3NlY2NlbiBsZWVmIHVveSB0YWh3IGV6aWxhaXRpbmkgOiAiX190aW5pX18iIC0gICAgICAgIA==
+OnNkb2h0ZW0gZ25pd29sbG9mIGVodCB0c2FlbHRhIGh0aXcgInNyYU0iIHNzYWxjIGEgc25pYXRub0MgKWkgICAg
+OnN0bmVtZXJpdXFlciBnbml3b2xsb2YgZWh0IHNhaCBoY2lodyB0cGlyY3Mgbm9odHlQIGEgZXRpclcgLjM=
+
+KUxRU3lNKCBlc2FiYXRhZCBsYW5vaXRhbGVyIGEgcm8gLHNpZGVSICxzdGNlamJvIG5vaHR5cCBlZG9jLW5JICxkZWhjYWNtZU0gP3lodyBkbmEgZXN1IHVveSBkbHVvdyBzbm9pdHVsb3MgZ25pd29sbG9mIGVodCBmbyBoY2lodyAsc3Jlc3UgMDAwLDAwMSB5YiB5bHRuZXVxZXJmIGRlc3NlY2NhIGVyYSB0YWh0IHNlcnV0Y3VydHMgeGVscG1vYyAwMDAsMDAxIGVyb3RzIG90IGRlcml1cWVyIGVyYSB1b3kgZkkgLjI=
+"""
+
+    print deobfuscate(encoded_questions)
