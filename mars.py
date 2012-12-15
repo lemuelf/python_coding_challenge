@@ -77,4 +77,18 @@ class TestMars(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    unittest.main()
+    if sys.version_info >= (2, 7):
+        unittest.main(exit=False)
+    else:
+        try:
+            unittest.main()
+        except SystemExit:
+            pass
+
+    mars = Mars()
+    mars.send({"name": "Marvin", "mission": "probe someone"})
+    with open(mars.filename) as f:
+        print f.readlines()
+
+    for key, value in mars.receive().iteritems():
+        print "%s: %s" % (key, value)
