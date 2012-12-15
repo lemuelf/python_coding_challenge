@@ -47,14 +47,17 @@ class TestMars(unittest.TestCase):
         fname = "./a_different_file.txt"
         mars = Mars(fname)
         mars.send({})
-        self.assertTrue(os.path.isfile(fname), "file supplied in __init__ not created")
+        self.assertTrue(os.path.isfile(fname),
+                        "file supplied in __init__ not created")
 
     def test_send_raises_an_exception_if_passed_with_non_dict(self):
         self.assertRaises(Exception, self.mars.send, "")
 
     def test_send_returns_1_on_success(self):
-        self.assertEqual(self.mars.send({"name": "marvin", "mission": "probe someone"}), 1, \
-                    "successful send did not return 1")
+        self.assertEqual(
+            1, self.mars.send({"name": "marvin", "mission": "probe someone"}),
+            "successful send did not return 1"
+        )
 
     def test_send_writes_a_json_file(self):
         self.mars.send({})
@@ -66,9 +69,11 @@ class TestMars(unittest.TestCase):
     def test_receive_returns_a_dict(self):
         self.mars.send({})
         if sys.version_info >= (2, 7):
-            self.assertIs(type(self.mars.receive()), dict, "receive() return value is not dict")
+            self.assertIs(type(self.mars.receive()), dict,
+                          "receive() return value is not dict")
         else:
-            self.assertTrue(type(self.mars.receive()) is dict, "receive() return value is not dict")
+            self.assertTrue(type(self.mars.receive()) is dict,
+                            "receive() return value is not dict")
 
 
 if __name__ == "__main__":
