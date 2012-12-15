@@ -39,19 +39,52 @@ class TestMars(unittest.TestCase):
     def setUp(self):
         self.mars = Mars()
 
+        # stub json.dump
+        self.json_dump = json.dump
+        json.dump = lambda d, fd: None
+
+        def mocked_open(self):
+            def actually_curried_open(filename, mode):
+                self.file_opened = filename
+            # stub __enter__ and __exit__ so with won't complain
+            actually_curried_open.__enter__ = lambda *args: None
+            actually_curried_open.__exit__ = lambda *args: None
+            return actually_curried_open
+        self.mocked_open_callback = mocked_open
+
+        # def open_mock(filename, mode):
+        #     self.file_opened = filename
+        # import __builtin__
+        # __builtin__.open = mocked_open(self)
+
     def tearDown(self):
         if os.path.isfile(self.mars.filename):
             os.unlink(self.mars.filename)
+        json.dump = self.json_dump
 
     def test_file_passed_in_init_is_the_file_being_worked_on(self):
+        # black-box test
         fname = "./a_different_file.txt"
         mars = Mars(fname)
+
+        import __builtin__
+        orig_open = __builtin__.open
+        __builtin__.open = self.mocked_open_callback(self)
+
         mars.send({})
-        self.assertTrue(os.path.isfile(fname),
-                        "file supplied in __init__ not created")
+        # self.assertTrue(os.path.isfile(fname),
+        #                 "file supplied in __init__ not created")
+        __builtin__.open = orig_open
+        self.assertEqual(self.file_opened, fname)
+        # self.assertEqual(json.dump("", ""), None)
+        # import types
+        # self.assertIs(type(open), types.FunctionType)
 
     def test_send_raises_an_exception_if_passed_with_non_dict(self):
-        self.assertRaises(Exception, self.mars.send, "")
+        self.assertRaises(
+            Exception, self.mars.send, "",
+            msg="send() with non-dict argument did not raise an Exception"
+        )
 
     def test_send_returns_1_on_success(self):
         self.assertEqual(
