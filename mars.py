@@ -2,6 +2,8 @@
 
 import json
 import os
+import sys
+import unittest
 
 
 class Mars:
@@ -33,31 +35,41 @@ class Mars:
             raise Exception("%s: %s" % (type(e), e.args))
 
 
+class TestMars(unittest.TestCase):
+    def setUp(self):
+        self.mars = Mars()
+
+    def tearDown(self):
+        if os.path.isfile(self.mars.filename):
+            os.unlink(self.mars.filename)
+
+    def test_file_passed_in_init_is_the_file_being_worked_on(self):
+        fname = "./a_different_file.txt"
+        mars = Mars(fname)
+        mars.send({})
+        self.assertTrue(os.path.isfile(fname), "file supplied in __init__ not created")
+
+    def test_send_raises_an_exception_if_passed_with_non_dict(self):
+        self.assertRaises(Exception, self.mars.send, "")
+
+    def test_send_returns_1_on_success(self):
+        self.assertEqual(self.mars.send({"name": "marvin", "mission": "probe someone"}), 1, \
+                    "successful send did not return 1")
+
+    def test_send_writes_a_json_file(self):
+        self.mars.send({})
+        self.assertTrue(os.path.isfile(self.mars.filename), "file not created")
+
+    def test_receive_raises_an_exception_if_json_file_doesnt_exist(self):
+        self.assertRaises(Exception, self.mars.receive)
+
+    def test_receive_returns_a_dict(self):
+        self.mars.send({})
+        if sys.version_info >= (2, 7):
+            self.assertIs(type(self.mars.receive()), dict, "receive() return value is not dict")
+        else:
+            self.assertTrue(type(self.mars.receive()) is dict, "receive() return value is not dict")
+
+
 if __name__ == "__main__":
-    mars = Mars()
-
-    try:
-        mars.send("")
-    except Exception as e:
-        # also asserts that an exception is raised
-        assert type(e) is Exception, \
-            "send() with a non-dict argument did not raise an Exception"
-
-    assert mars.send({"name": "marvin", "mission": "probe someone"}) == 1, \
-        "successful send did not return 1"
-    assert os.path.isfile(mars.filename), "file not created"
-
-    assert type(mars.receive()) is dict, "receive() return value is not dict"
-
-    os.unlink(mars.filename)
-    assert os.path.exists(mars.filename) is False
-    try:
-        mars.receive()
-    except Exception as e:
-        # asserts that an exception is raised if the file doesn't exist
-        assert type(e) is Exception, "exception type is not "
-
-    fname = "./a_different_file.txt"
-    mars = Mars(fname)
-    mars.send({})
-    assert os.path.isfile(fname), "file supplied in __init__ not created"
+    unittest.main()
